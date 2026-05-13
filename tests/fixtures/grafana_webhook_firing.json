@@ -1,0 +1,47 @@
+{
+  "receiver": "max-webhook",
+  "status": "firing",
+  "orgId": 1,
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": {
+        "alertname": "High CPU usage",
+        "service": "samolet",
+        "instance": "app-01",
+        "severity": "critical",
+        "env": "prod"
+      },
+      "annotations": {
+        "summary": "CPU usage is too high",
+        "description": "CPU usage is above 90% for 5 minutes",
+        "runbook_url": "https://example.com/runbooks/high-cpu"
+      },
+      "startsAt": "2026-05-13T18:20:00+03:00",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "https://grafana.example.com/alerting/rules/1",
+      "fingerprint": "abc123",
+      "silenceURL": "https://grafana.example.com/alerting/silence/new",
+      "dashboardURL": "https://grafana.example.com/d/server/server-overview",
+      "panelURL": "https://grafana.example.com/d/server/server-overview?viewPanel=12",
+      "values": {
+        "A": 93.4
+      }
+    }
+  ],
+  "groupLabels": {
+    "alertname": "High CPU usage"
+  },
+  "commonLabels": {
+    "service": "samolet",
+    "severity": "critical"
+  },
+  "commonAnnotations": {},
+  "externalURL": "https://grafana.example.com/",
+  "version": "1",
+  "groupKey": "{}:{alertname=\"High CPU usage\"}",
+  "truncatedAlerts": 0,
+  "title": "[FIRING:1] High CPU usage",
+  "state": "alerting",
+  "message": "CPU usage is too high"
+}

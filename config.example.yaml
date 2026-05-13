@@ -1,0 +1,26 @@
+routes:
+  - name: critical-personal
+    match:
+      severity: critical
+    chat_id: 111111111
+    notify: true
+    template: group
+
+  - name: samolet-team
+    match:
+      service: samolet
+    chat_id: 222222222
+    notify: true
+    template: group
+
+  - name: dev-muted
+    match:
+      env: dev
+    chat_id: 333333333
+    notify: false
+    template: group
+
+default_route:
+  chat_id: 444444444
+  notify: true
+  template: group

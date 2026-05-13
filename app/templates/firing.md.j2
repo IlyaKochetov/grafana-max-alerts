@@ -1,0 +1,19 @@
+🔥 FIRING: {{ alert.alertname }}
+
+{% if alert.service %}Service: {{ alert.service }}
+{% endif %}{% if alert.instance %}Instance: {{ alert.instance }}
+{% endif %}{% if alert.severity %}Severity: {{ alert.severity }}
+{% endif %}Started: {{ alert.starts_at|datetime_msk }}
+
+{% if alert.description %}{{ alert.description }}
+{% elif alert.summary %}{{ alert.summary }}
+{% endif %}
+{% if alert.dashboard_url %}
+Dashboard: {{ alert.dashboard_url }}
+{% endif %}{% if alert.panel_url %}
+Panel: {{ alert.panel_url }}
+{% endif %}{% if alert.silence_url %}
+Silence: {{ alert.silence_url }}
+{% endif %}{% if alert.runbook_url %}
+Runbook: {{ alert.runbook_url }}
+{% endif %}

@@ -8,7 +8,7 @@
 ## Состояние проекта
 
 - [x] Документы логики и технической реализации написаны
-- [ ] Код не написан
+- [x] Код MVP написан
 
 ---
 
@@ -118,6 +118,8 @@ grafana-max-alerts/
 - `uv run mypy app/` — без ошибок
 - `uv run ruff check app/` — без ошибок
 
+**Статус:** реализовано.
+
 ---
 
 ### Этап 2 — Grafana schemas + нормализация
@@ -150,6 +152,8 @@ grafana-max-alerts/
 - `endsAt = 0001-01-01T00:00:00Z` → `ends_at = None`
 - Пустой `alerts` в payload поднимает ошибку (или AlertGroup с пустым списком — обработать на уровне endpoint)
 - Покрытие: нет alertname, нет fingerprint, несколько alerts, mixed status
+
+**Статус:** реализовано.
 
 ---
 
@@ -218,6 +222,8 @@ Dashboard: https://...
 - `truncatedAlerts > 0` отображается в группе
 - Нет паники если поля `None`
 
+**Статус:** реализовано.
+
 ---
 
 ### Этап 4 — Security
@@ -242,6 +248,8 @@ Dashboard: https://...
 - Неправильный → `SecurityError`
 - `None` секрет → проходит (dev)
 - Нет timing attack через `==`
+
+**Статус:** реализовано.
 
 ---
 
@@ -272,6 +280,8 @@ Content-Type: application/json
 - Timeout → retry
 - Тесты через `respx` (без реального MAX API)
 
+**Статус:** реализовано.
+
 ---
 
 ### Этап 6 — Router
@@ -294,6 +304,8 @@ Content-Type: application/json
 - дубли chat_id → одно сообщение
 - YAML конфиг парсится в `list[RouteConfig]`
 - `config.yaml` опционален — без него работает только с `MAX_DEFAULT_CHAT_ID`
+
+**Статус:** реализовано.
 
 ---
 
@@ -321,6 +333,8 @@ stable_hash(f"{route_chat_id}:{group.group_key}:{','.join(sorted(f'{a.fingerprin
 - Вызов после TTL → not seen
 - `DEDUP_ENABLED=false` — dedup отключается полностью
 - Тесты с явным управлением временем (mock time)
+
+**Статус:** реализовано.
 
 ---
 
@@ -365,6 +379,8 @@ raw_body = await request.body()
 - MAX API 401 → логируется, возвращается 502
 - Интеграционный тест через `TestClient` с mock MAX API (respx)
 
+**Статус:** реализовано.
+
 ---
 
 ### Этап 9 — Docker + docs
@@ -398,22 +414,24 @@ raw_body = await request.body()
 - `GET /health` через curl → ok
 - README: любой devops разворачивает за 10-15 минут
 
+**Статус:** реализовано, Docker запуск требует локальной проверки в окружении с Docker.
+
 ---
 
 ## Приоритеты по версиям
 
 ### MVP (Этапы 1–9)
-Всё выше. Один дефолтный chat_id. Shared secret. In-memory dedup.
+- [x] Всё выше. Один дефолтный chat_id. Shared secret. In-memory dedup.
 
 ### v0.2
-- [ ] Роутинг по labels (`config.yaml`)
-- [ ] Разные шаблоны firing/resolved/group
-- [ ] Retry в MaxClient через tenacity
-- [ ] Structured JSON logs через structlog
-- [ ] Unit-тесты всех сервисов
+- [x] Роутинг по labels (`config.yaml`)
+- [x] Разные шаблоны firing/resolved/group
+- [x] Retry в MaxClient через tenacity
+- [x] Structured JSON logs через stdlib formatter
+- [x] Unit-тесты основных сервисов
 
 ### v1.0
-- [ ] HMAC-подпись Grafana (Этап 4, Режим 2)
+- [x] HMAC-подпись Grafana (Этап 4, Режим 2)
 - [ ] Redis-backend для dedup
 - [ ] Prometheus endpoint `/metrics`
 - [ ] Примеры systemd + nginx

@@ -1,0 +1,19 @@
+{% if group.status == "firing" %}🔥 FIRING{% else %}✅ RESOLVED{% endif %}: {{ group.alerts|length }} alert{% if group.alerts|length != 1 %}s{% endif %}
+
+{% for alert in group.alerts %}
+{{ loop.index }}. {{ alert.alertname }}
+   service={{ alert.service or "-" }} instance={{ alert.instance or "-" }} severity={{ alert.severity or "unknown" }}
+{% if alert.summary %}   {{ alert.summary }}
+{% endif %}
+{% endfor %}
+{% if group.truncated_alerts > 0 %}
+⚠️ Grafana truncated {{ group.truncated_alerts }} alerts in this notification.
+{% endif %}
+{% set first = group.alerts[0] if group.alerts else None %}
+{% if first and first.dashboard_url %}
+Dashboard: {{ first.dashboard_url }}
+{% endif %}{% if first and first.panel_url %}
+Panel: {{ first.panel_url }}
+{% endif %}{% if first and first.silence_url %}
+Silence: {{ first.silence_url }}
+{% endif %}

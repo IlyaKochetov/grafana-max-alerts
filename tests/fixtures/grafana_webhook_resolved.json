@@ -1,0 +1,41 @@
+{
+  "receiver": "max-webhook",
+  "status": "resolved",
+  "orgId": 1,
+  "alerts": [
+    {
+      "status": "resolved",
+      "labels": {
+        "alertname": "High CPU usage",
+        "service": "samolet",
+        "instance": "app-01",
+        "severity": "critical",
+        "env": "prod"
+      },
+      "annotations": {
+        "summary": "CPU usage is back to normal",
+        "description": "CPU usage dropped below threshold"
+      },
+      "startsAt": "2026-05-13T18:20:00+03:00",
+      "endsAt": "2026-05-13T18:32:00+03:00",
+      "generatorURL": "https://grafana.example.com/alerting/rules/1",
+      "fingerprint": "abc123",
+      "dashboardURL": "https://grafana.example.com/d/server/server-overview"
+    }
+  ],
+  "groupLabels": {
+    "alertname": "High CPU usage"
+  },
+  "commonLabels": {
+    "service": "samolet",
+    "severity": "critical"
+  },
+  "commonAnnotations": {},
+  "externalURL": "https://grafana.example.com/",
+  "version": "1",
+  "groupKey": "{}:{alertname=\"High CPU usage\"}",
+  "truncatedAlerts": 0,
+  "title": "[RESOLVED:1] High CPU usage",
+  "state": "ok",
+  "message": "CPU usage is back to normal"
+}
