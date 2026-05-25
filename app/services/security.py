@@ -14,7 +14,7 @@ def verify_shared_secret(received: str | None, expected: str | None) -> bool:
         return True
     if not received:
         return False
-    return hmac.compare_digest(received, expected)
+    return _constant_time_equals(received, expected)
 
 
 def verify_webhook_security(
@@ -55,8 +55,12 @@ def verify_hmac(headers: Mapping[str, str], raw_body: bytes, settings: Settings)
         hashlib.sha256,
     ).hexdigest()
     expected_variants = (digest, f"sha256={digest}")
-    if not any(hmac.compare_digest(received, expected) for expected in expected_variants):
+    if not any(_constant_time_equals(received, expected) for expected in expected_variants):
         raise SecurityError("Invalid webhook signature")
+
+
+def _constant_time_equals(received: str, expected: str) -> bool:
+    return hmac.compare_digest(received.encode("utf-8"), expected.encode("utf-8"))
 
 
 def _verify_timestamp(timestamp: str, max_age_seconds: int) -> None:

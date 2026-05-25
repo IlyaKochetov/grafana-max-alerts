@@ -1,9 +1,25 @@
-services:
-  grafana-max-alerts:
-    build: .
-    container_name: grafana-max-alerts
-    restart: unless-stopped
-    env_file:
-      - .env
-    ports:
-      - "127.0.0.1:8000:8000"
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV UV_PROJECT_ENVIRONMENT=/app/.venv
+
+WORKDIR /app
+
+RUN pip install --no-cache-dir uv
+
+COPY pyproject.toml uv.lock* ./
+
+RUN if [ -f uv.lock ]; then \
+      uv sync --frozen --no-dev; \
+    else \
+      uv sync --no-dev; \
+    fi
+
+COPY app ./app
+
+ENV PATH="/app/.venv/bin:$PATH"
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
