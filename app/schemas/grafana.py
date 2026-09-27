@@ -19,7 +19,7 @@ class GrafanaAlert(BaseModel):
     silenceURL: str | None = None
     dashboardURL: str | None = None
     panelURL: str | None = None
-    values: dict[str, Any] = Field(default_factory=dict)
+    values: dict[str, Any] | None = None
 
 
 class GrafanaWebhookPayload(BaseModel):

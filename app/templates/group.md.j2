@@ -1,19 +1,27 @@
-{% if group.status == "firing" %}🔥 FIRING{% else %}✅ RESOLVED{% endif %}: {{ group.alerts|length }} alert{% if group.alerts|length != 1 %}s{% endif %}
+{% set firing = group.alerts
+    | selectattr('status', 'equalto', 'firing')
+    | list
+%}
 
-{% for alert in group.alerts %}
-{{ loop.index }}. {{ alert.alertname }}
-   service={{ alert.service or "-" }} instance={{ alert.instance or "-" }} severity={{ alert.severity or "unknown" }}
-{% if alert.summary %}   {{ alert.summary }}
-{% endif %}
+{% set resolved = group.alerts
+    | selectattr('status', 'equalto', 'resolved')
+    | list
+%}
+
+{% if firing %}
+🚨 **{{ firing[0].alertname }} — {{ firing|length }} активных**
+
+{% for alert in firing %}
+**{{ loop.index }}.{% if alert.is_new %} 🆕{% endif %} {{ alert.summary }}**
+{% if alert.description %}{{ alert.description }}{% endif %}
+
 {% endfor %}
-{% if group.truncated_alerts > 0 %}
-⚠️ Grafana truncated {{ group.truncated_alerts }} alerts in this notification.
 {% endif %}
-{% set first = group.alerts[0] if group.alerts else None %}
-{% if first and first.dashboard_url %}
-Dashboard: {{ first.dashboard_url }}
-{% endif %}{% if first and first.panel_url %}
-Panel: {{ first.panel_url }}
-{% endif %}{% if first and first.silence_url %}
-Silence: {{ first.silence_url }}
+
+{% if resolved %}
+✅ **Устранено — {{ resolved|length }}**
+
+{% for alert in resolved %}
+{{ alert.summary }}
+{% endfor %}
 {% endif %}

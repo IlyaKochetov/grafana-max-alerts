@@ -78,7 +78,7 @@ def _normalize_alert(alert: GrafanaAlert, payload: GrafanaWebhookPayload) -> Ale
             payload.commonLabels.get("environment"),
         ),
         summary=annotations.get("summary"),
-        description=annotations.get("description") or payload.message,
+        description=annotations.get("description"),
         runbook_url=annotations.get("runbook_url") or annotations.get("runbook"),
         starts_at=starts_at,
         ends_at=ends_at,
@@ -89,7 +89,7 @@ def _normalize_alert(alert: GrafanaAlert, payload: GrafanaWebhookPayload) -> Ale
         silence_url=alert.silenceURL,
         labels=labels,
         annotations=annotations,
-        values=alert.values,
+        values=alert.values or {},
     )
 
 

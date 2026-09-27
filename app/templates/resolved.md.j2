@@ -1,14 +1,13 @@
-✅ RESOLVED: {{ alert.alertname }}
+✅ **Resolved: {{ alert.alertname }}**
 
-{% if alert.service %}Service: {{ alert.service }}
-{% endif %}{% if alert.instance %}Instance: {{ alert.instance }}
-{% endif %}Duration: {{ alert.starts_at|duration(alert.ends_at) }}
-Resolved: {{ alert.ends_at|datetime_msk }}
+{% if alert.summary %}{{ alert.summary }}
+{% endif %}
 
-{% if alert.dashboard_url %}
-Dashboard: {{ alert.dashboard_url }}
-{% endif %}{% if alert.panel_url %}
-Panel: {{ alert.panel_url }}
-{% endif %}{% if alert.runbook_url %}
-Runbook: {{ alert.runbook_url }}
+{% if alert.instance %}**Instance:** {{ alert.instance }}
+{% endif %}{% if alert.service %}**Service:** {{ alert.service }}
+{% endif %}**Duration:** {{ alert.starts_at|duration(alert.ends_at) }}
+**Resolved:** {{ alert.ends_at|datetime_msk }}
+
+{% if alert.panel_url %}[Open panel]({{ alert.panel_url }})
+{% elif alert.dashboard_url %}[Open dashboard]({{ alert.dashboard_url }})
 {% endif %}

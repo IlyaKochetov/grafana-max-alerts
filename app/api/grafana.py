@@ -68,6 +68,21 @@ async def grafana_webhook(request: Request) -> dict[str, Any]:
             deduplicated += 1
             continue
 
+	for alert in group.alerts:
+
+        if alert.status != "firing":
+          continue
+
+        new_key = f"alert-active:{route_config.chat_id}:{alert.fingerprint}"
+
+        alert.is_new = not await request.app.state.dedup.seen(new_key)
+
+        if alert.is_new:
+          await request.app.state.dedup.mark_seen(
+            new_key,
+            86400 * 7,
+        )
+
         text = request.app.state.formatter.format_group(group, route_config.template)
         text = truncate_message(text, settings.max_message_max_length)
 

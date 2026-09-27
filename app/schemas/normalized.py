@@ -19,6 +19,9 @@ class AlertEvent(BaseModel):
     starts_at: datetime | None = None
     ends_at: datetime | None = None
     fingerprint: str
+
+    is_new: bool = False
+
     generator_url: str | None = None
     dashboard_url: str | None = None
     panel_url: str | None = None
@@ -26,7 +29,6 @@ class AlertEvent(BaseModel):
     labels: dict[str, str] = Field(default_factory=dict)
     annotations: dict[str, str] = Field(default_factory=dict)
     values: dict[str, Any] = Field(default_factory=dict)
-
 
 class AlertGroup(BaseModel):
     receiver: str | None = None
