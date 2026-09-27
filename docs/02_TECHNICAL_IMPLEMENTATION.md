@@ -211,7 +211,7 @@ HTTP status: `400` или `422`.
 
 ## 5. Конфигурация
 
-### `.env.example`
+### `../.env.example`
 
 ```env
 APP_NAME=grafana-max-alerts
@@ -249,7 +249,7 @@ REQUEST_BODY_MAX_BYTES=1048576
 
 ---
 
-### `config.example.yaml`
+### `../config.example.yaml`
 
 ```yaml
 routes:
@@ -289,7 +289,7 @@ templates:
 
 ## 6. Pydantic-модели Grafana
 
-Файл: `app/schemas/grafana.py`.
+Файл: `../app/schemas/grafana.py`.
 
 Модели должны выдерживать неизвестные поля. Рекомендуется `extra="allow"` для совместимости.
 
@@ -348,7 +348,7 @@ class GrafanaWebhookPayload(BaseModel):
 
 ## 7. Нормализованные модели
 
-Файл: `app/schemas/normalized.py`.
+Файл: `../app/schemas/normalized.py`.
 
 ```python
 from datetime import datetime
@@ -403,7 +403,7 @@ class AlertGroup(BaseModel):
 
 ## 8. Нормализация
 
-Файл: `app/services/normalizer.py`.
+Файл: `../app/services/normalizer.py`.
 
 Основная функция:
 
@@ -473,7 +473,7 @@ def normalize_grafana_payload(payload: GrafanaWebhookPayload) -> AlertGroup:
 
 ## 9. Безопасность webhook
 
-Файл: `app/services/security.py`.
+Файл: `../app/services/security.py`.
 
 Нужно реализовать два режима.
 
@@ -521,7 +521,7 @@ Grafana умеет подписывать webhook payload через HMAC-SHA256
 
 ## 10. MAX API client
 
-Файл: `app/services/max_client.py`.
+Файл: `../app/services/max_client.py`.
 
 Клиент должен быть изолирован. Остальной код не должен знать детали MAX API.
 
@@ -622,7 +622,7 @@ HTTP-коды:
 
 ## 11. Форматирование сообщений
 
-Файл: `app/services/formatter.py`.
+Файл: `../app/services/formatter.py`.
 
 Интерфейс:
 
@@ -665,7 +665,7 @@ def truncate_message(text: str, max_length: int) -> str:
 
 ### Шаблон group
 
-`app/templates/group.md.j2`:
+`../app/templates/group.md.j2`:
 
 ```jinja2
 {% if group.status == "firing" %}🔥{% else %}✅{% endif %} **{{ group.status.upper() }}: {{ group.alerts|length }} alert{% if group.alerts|length != 1 %}s{% endif %}**
@@ -696,7 +696,7 @@ Silence: {{ first.silence_url }}
 
 ## 12. Роутинг
 
-Файл: `app/services/router.py`.
+Файл: `../app/services/router.py`.
 
 Модели:
 
@@ -743,7 +743,7 @@ class AlertRouter:
 
 ## 13. Deduplication
 
-Файл: `app/services/dedup.py`.
+Файл: `../app/services/dedup.py`.
 
 Интерфейс:
 
@@ -796,7 +796,7 @@ SET key 1 EX ttl NX
 
 ## 14. Endpoint flow
 
-Файл: `app/api/grafana.py`.
+Файл: `../app/api/grafana.py`.
 
 Псевдокод:
 
@@ -940,12 +940,12 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY pyproject.toml uv.lock* ./
+COPY ../pyproject.toml uv.lock* ./
 
 RUN pip install --no-cache-dir uv \
     && uv sync --frozen --no-dev || uv sync --no-dev
 
-COPY . .
+COPY .. .
 
 EXPOSE 8000
 

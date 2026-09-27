@@ -145,7 +145,7 @@ Duration: 11m 42s
 - Один дефолтный `chat_id`.
 - Красивое markdown-сообщение.
 - Dockerfile.
-- `docker-compose.yml`.
+- `../docker-compose.yml`.
 - `GET /health`.
 - README с инструкцией подключения Grafana и MAX.
 
@@ -574,7 +574,7 @@ Grafana может менять детали payload или пользовате
 - При недоступном MAX API ошибка логируется.
 - Есть Dockerfile.
 - Есть docker-compose пример.
-- Есть `.env.example`.
+- Есть `../.env.example`.
 - Есть README с пошаговой настройкой.
 - Есть тесты:
   - парсинг Grafana payload;
@@ -593,12 +593,12 @@ Grafana может менять детали payload или пользовате
 
 Скелет FastAPI-приложения:
 
-- `pyproject.toml`;
-- `app/main.py`;
-- `app/config.py`;
+- `../pyproject.toml`;
+- `../app/main.py`;
+- `../app/config.py`;
 - endpoint `/health`;
 - endpoint `/webhooks/grafana`;
-- `.env.example`;
+- `../.env.example`;
 - тестовый запуск.
 
 ### Этап 2

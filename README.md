@@ -59,18 +59,36 @@ curl -X POST "http://127.0.0.1:8000/webhooks/grafana" \
   -d @tests/fixtures/grafana_webhook_firing.json
 ```
 
-Пример сообщения:
+Пример сообщения (один алерт):
 
 ```text
-🔥 FIRING: High CPU usage
-
-Service: samolet
-Instance: app-01
-Severity: critical
-Started: 2026-05-13 18:20 MSK
+🚨 High CPU usage
 
 CPU usage is above 90% for 5 minutes
+
+[Открыть панель Grafana](https://grafana.example.com/d/abc/panel-1)
 ```
+
+Кнопкой Grafana **Test** тоже можно пользоваться: поле `values` в тестовом payload приходит как `null`, а не `{}`, и сервис корректно это обрабатывает.
+
+### Групповые сообщения
+
+Если в одной группе несколько алертов, используется шаблон `group.md.j2`: firing и resolved алерты разделяются, а рядом с каждым новым (то есть впервые увиденным для данного chat_id за последние 7 дней) firing-алертом добавляется отметка 🆕:
+
+```text
+🚨 **High CPU usage — 2 активных**
+
+**1. 🆕 High CPU usage**
+CPU usage is above 90% for 5 minutes
+
+**2. Redis down**
+Redis instance is not responding
+
+✅ **Устранено — 1**
+Disk usage is above 90%
+```
+
+Отметка 🆕 снимается автоматически через 7 дней отсутствия повторных срабатываний (или раньше, если алерт был resolved и снова начал firing).
 
 ## Роутинг
 
@@ -114,3 +132,8 @@ uv run mypy app/
 - Webhook возвращает `401`: проверьте `X-Webhook-Secret`.
 - Webhook возвращает `502`: MAX API не принял сообщение или временно недоступен, смотрите логи контейнера.
 - Сообщения повторяются: увеличьте `DEDUP_TTL_SECONDS` или проверьте, что Grafana не меняет fingerprint/groupKey.
+- Webhook возвращает `422` при нажатии кнопки **Test** в Grafana Contact Point: обновите сервис — до фикса `values: null` в тестовом payload не проходило валидацию.
+
+## Changelog
+
+Список изменений — в [CHANGELOG.md](CHANGELOG.md).

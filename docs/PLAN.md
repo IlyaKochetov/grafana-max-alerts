@@ -1,6 +1,6 @@
 # PLAN.md — grafana-max-alerts
 
-> Рабочий план реализации. Написан на основе `01_PROJECT_LOGIC.md` и `02_TECHNICAL_IMPLEMENTATION.md`.
+> Рабочий план реализации. Написан на основе `01_PROJECT_LOGIC.md` и `docs/02_TECHNICAL_IMPLEMENTATION.md`.
 > Цель: MVP → production-ready сервис поэтапно, без раздувания скоупа.
 
 ---
@@ -101,14 +101,14 @@ grafana-max-alerts/
 **Цель:** проект запускается, /health отвечает, тесты проходят.
 
 **Файлы:**
-- `pyproject.toml` — зависимости, ruff, mypy
-- `app/main.py` — FastAPI app factory с lifespan
-- `app/config.py` — `Settings` через `pydantic-settings`, все env из `.env.example`
-- `app/logging_config.py` — JSON formatter в prod, обычный в dev
-- `app/exceptions.py` — иерархия исключений
-- `app/api/health.py` — `GET /health` (200 ok) + `GET /ready` (проверка конфига)
-- `.env.example`
-- `tests/test_health.py`
+- `../pyproject.toml` — зависимости, ruff, mypy
+- `../app/main.py` — FastAPI app factory с lifespan
+- `../app/config.py` — `Settings` через `pydantic-settings`, все env из `.env.example`
+- `../app/logging_config.py` — JSON formatter в prod, обычный в dev
+- `../app/exceptions.py` — иерархия исключений
+- `../app/api/health.py` — `GET /health` (200 ok) + `GET /ready` (проверка конфига)
+- `../.env.example`
+- `../tests/test_health.py`
 
 **Критерии готовности:**
 - `uv run uvicorn app.main:app --reload` — запускается без ошибок
@@ -127,12 +127,12 @@ grafana-max-alerts/
 **Цель:** уметь разобрать Grafana payload и получить нормализованные модели.
 
 **Файлы:**
-- `app/schemas/grafana.py` — `GrafanaAlert`, `GrafanaWebhookPayload`
-- `app/schemas/normalized.py` — `AlertEvent`, `AlertGroup`
-- `app/services/normalizer.py` — `normalize_grafana_payload()` + `stable_hash()`
-- `tests/fixtures/grafana_webhook_firing.json`
-- `tests/fixtures/grafana_webhook_resolved.json`
-- `tests/test_normalizer.py`
+- `../app/schemas/grafana.py` — `GrafanaAlert`, `GrafanaWebhookPayload`
+- `../app/schemas/normalized.py` — `AlertEvent`, `AlertGroup`
+- `../app/services/normalizer.py` — `normalize_grafana_payload()` + `stable_hash()`
+- `../tests/fixtures/grafana_webhook_firing.json`
+- `../tests/fixtures/grafana_webhook_resolved.json`
+- `../tests/test_normalizer.py`
 
 **Правила нормализации (приоритеты):**
 
@@ -162,11 +162,11 @@ grafana-max-alerts/
 **Цель:** из `AlertGroup` получить готовый текст для MAX.
 
 **Файлы:**
-- `app/templates/firing.md.j2`
-- `app/templates/resolved.md.j2`
-- `app/templates/group.md.j2`
-- `app/services/formatter.py` — `MessageFormatter`, `truncate_message()`
-- `tests/test_formatter.py`
+- `../app/templates/firing.md.j2`
+- `../app/templates/resolved.md.j2`
+- `../app/templates/group.md.j2`
+- `../app/services/formatter.py` — `MessageFormatter`, `truncate_message()`
+- `../tests/test_formatter.py`
 
 **Шаблоны:**
 
@@ -230,7 +230,7 @@ Dashboard: https://...
 
 **Цель:** webhook защищён, секреты не утекают.
 
-**Файл:** `app/services/security.py`
+**Файл:** `../app/services/security.py`
 
 **Режим 1 (MVP) — shared secret:**
 - Ожидать заголовок `X-Webhook-Secret`
@@ -257,7 +257,7 @@ Dashboard: https://...
 
 **Цель:** надёжная отправка сообщений в MAX с retry.
 
-**Файл:** `app/services/max_client.py`
+**Файл:** `../app/services/max_client.py`
 
 **API:**
 ```
@@ -288,7 +288,7 @@ Content-Type: application/json
 
 **Цель:** выбрать правильный чат для каждой группы алертов.
 
-**Файл:** `app/services/router.py`
+**Файл:** `../app/services/router.py`
 
 **Алгоритм:**
 1. Собрать labels каждого alert: `common_labels` + `alert.labels` (alert имеет приоритет)
@@ -313,7 +313,7 @@ Content-Type: application/json
 
 **Цель:** не дублировать сообщения при повторных webhook.
 
-**Файл:** `app/services/dedup.py`
+**Файл:** `../app/services/dedup.py`
 
 **Ключ дедупликации:**
 ```python
@@ -342,7 +342,7 @@ stable_hash(f"{route_chat_id}:{group.group_key}:{','.join(sorted(f'{a.fingerprin
 
 **Цель:** собрать все слои в рабочий endpoint.
 
-**Файл:** `app/api/grafana.py`
+**Файл:** `../app/api/grafana.py`
 
 **Flow:**
 ```
@@ -388,12 +388,12 @@ raw_body = await request.body()
 **Цель:** проект готов к deployment и понятен новому пользователю.
 
 **Файлы:**
-- `Dockerfile` — multi-stage, python:3.12-slim, uv
-- `docker-compose.yml` — bind `127.0.0.1:8000:8000`, volume config.yaml
-- `.env.example` — все переменные с комментариями
-- `config.example.yaml` — примеры routes
+- `../Dockerfile` — multi-stage, python:3.12-slim, uv
+- `../docker-compose.yml` — bind `127.0.0.1:8000:8000`, volume config.yaml
+- `../.env.example` — все переменные с комментариями
+- `../config.example.yaml` — примеры routes
 - `Makefile` — `make dev`, `make test`, `make lint`, `make build`, `make up`, `make down`
-- `README.md` — полное руководство
+- `../README.md` — полное руководство
 
 **README обязан содержать:**
 1. Что делает проект (2-3 предложения)
